@@ -1,6 +1,39 @@
+/* Universal box-sizing for consistent sizing calculations */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* No padding or margin for root elements */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Main React container (parent element) */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  display: flex;
+  /* Flexible layout */
+  flex-direction: column;
+  /* Stack children vertically (Navbar and content) */
+  width: 100%;
+  /* Full width of the viewport */
+  height: 100%;
+  /* Full height of the viewport */
+  overflow-x: hidden;
+  /* Prevent horizontal scrolling */
 }

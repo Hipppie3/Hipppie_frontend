@@ -1,5 +1,6 @@
 import React from 'react';
 import {Routes, Route} from 'react-router-dom';
+import './App.css'
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
 import Players from './pages/Players.jsx';
@@ -7,7 +8,7 @@ import Teams from './pages/Teams.jsx';
 
 function App() {
   return (
-    <div>
+    <div className="main-container">
       <Navbar />
     <div>
       <Routes>

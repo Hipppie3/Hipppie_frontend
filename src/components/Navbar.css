@@ -1,0 +1,137 @@
+/* General Navbar Styling */
+.navbar {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 0 16px;
+ background-color: #333;
+ /* Navbar background color */
+ color: white;
+ /* Navbar text color */
+ height: 60px;
+ /* Height of the navbar */
+ width: 100%;
+ /* Full width of the viewport */
+}
+
+/* Logo Link Styling */
+.logo-link {
+ text-decoration: none;
+ /* Removes underline */
+ color: inherit;
+ /* Ensures it uses the same color as the navbar */
+ font-size: 24px;
+ /* Adjust size for better visibility */
+ font-weight: bold;
+ /* Make it stand out */
+ cursor: pointer;
+ /* Pointer cursor for clickable logo */
+}
+
+/* Right-aligned Navigation Links */
+.nav-links {
+ display: flex;
+ /* Align links horizontally */
+ gap: 20px;
+ /* Space between links */
+ list-style: none;
+ /* Remove default list styling */
+ margin: 0;
+ /* Reset margin */
+ padding: 0;
+ /* Reset padding */
+}
+
+/* Link Styling for All States */
+.nav-links li a {
+ text-decoration: none;
+ /* Remove underline */
+ font-size: 18px;
+ /* Font size for navigation links */
+ color: white;
+ /* Default color for inactive links */
+}
+
+/* Styling for Active Links */
+.nav-links li a.active {
+ font-weight: bold;
+ /* Make active links bold */
+ color: #00bcd4;
+ /* Highlight active links */
+}
+
+.nav-links li a.inactive {
+ color: white;
+ /* Default color for inactive links */
+}
+
+/* Hamburger Button (Visible in Mobile View) */
+.hamburger {
+ display: none;
+ /* Hidden by default for larger screens */
+ background: none;
+ /* No background */
+ border: none;
+ /* No border */
+ font-size: 24px;
+ /* Icon size */
+ color: white;
+ /* Icon color */
+ cursor: pointer;
+ /* Pointer cursor for clickable button */
+}
+
+/* Responsive Styles for Mobile View */
+@media (max-width: 768px) {
+
+ /* Hamburger Button Display */
+ .hamburger {
+  display: block;
+  /* Show hamburger menu button */
+ }
+
+/* Navigation Links Hidden by Default */
+.nav-links {
+ opacity: 0;
+ /* Fully transparent */
+ transform: translateY(-20px);
+ /* Slide up initially */
+ flex-direction: column;
+ /* Stack links vertically */
+ gap: 20px;
+ /* Space between vertical links */
+ position: absolute;
+ /* Overlay the menu */
+ top: 60px;
+ /* Position below the navbar */
+ left: 0;
+ /* Full width starts from left edge */
+ right: 0;
+ /* Full width ends at right edge */
+ background-color: #333;
+ /* Same background as navbar */
+ padding: 20px;
+ /* Padding for the dropdown */
+ width: 100vw;
+ /* Full width of the viewport */
+ box-sizing: border-box;
+ /* Include padding in width */
+ align-items: center;
+ /* Center links horizontally */
+ text-align: center;
+ /* Center text inside links */
+ pointer-events: none;
+ /* Prevent interaction when hidden */
+ transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show Links When Menu is Open */
+.nav-links.show {
+ opacity: 1;
+ /* Fully visible */
+ transform: translateY(0);
+ /* Slide into place */
+ pointer-events: auto;
+ /* Allow interaction */
+}
+}
