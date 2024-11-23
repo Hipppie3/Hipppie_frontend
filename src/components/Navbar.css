@@ -90,48 +90,50 @@
   /* Show hamburger menu button */
  }
 
-/* Navigation Links Hidden by Default */
-.nav-links {
- opacity: 0;
- /* Fully transparent */
- transform: translateY(-20px);
- /* Slide up initially */
- flex-direction: column;
- /* Stack links vertically */
- gap: 20px;
- /* Space between vertical links */
- position: absolute;
- /* Overlay the menu */
- top: 60px;
- /* Position below the navbar */
- left: 0;
- /* Full width starts from left edge */
- right: 0;
- /* Full width ends at right edge */
- background-color: #333;
- /* Same background as navbar */
- padding: 20px;
- /* Padding for the dropdown */
- width: 100vw;
- /* Full width of the viewport */
- box-sizing: border-box;
- /* Include padding in width */
- align-items: center;
- /* Center links horizontally */
- text-align: center;
- /* Center text inside links */
- pointer-events: none;
- /* Prevent interaction when hidden */
- transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+ /* Navigation Links Hidden by Default */
+ .nav-links {
+  opacity: 0;
+  /* Fully transparent */
+  transform: translateY(-20px);
+  /* Slide up initially */
+  flex-direction: column;
+  /* Stack links vertically */
+  gap: 20px;
+  /* Space between vertical links */
+  position: absolute;
+  /* Overlay the menu */
+  top: 60px;
+  /* Position below the navbar */
+  left: 0;
+  /* Full width starts from left edge */
+  right: 0;
+  /* Full width ends at right edge */
+  background-color: #333;
+  /* Same background as navbar */
+  padding: 20px;
+  /* Padding for the dropdown */
+  width: 100vw;
+  /* Full width of the viewport */
+  box-sizing: border-box;
+  /* Include padding in width */
+  align-items: center;
+  /* Center links horizontally */
+  text-align: center;
+  /* Center text inside links */
+  pointer-events: none;
+  /* Prevent interaction when hidden */
+  transition: none;
+  /* Disable transition during resize for mobile view */
+ }
 
-/* Show Links When Menu is Open */
-.nav-links.show {
- opacity: 1;
- /* Fully visible */
- transform: translateY(0);
- /* Slide into place */
- pointer-events: auto;
- /* Allow interaction */
-}
+ /* Show Links When Menu is Open */
+ .nav-links.show {
+  opacity: 1;
+  /* Fully visible */
+  transform: translateY(0);
+  /* Slide into place */
+  pointer-events: auto;
+  /* Allow interaction */
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+ }
 }
