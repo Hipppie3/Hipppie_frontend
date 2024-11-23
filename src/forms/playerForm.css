@@ -1,0 +1,116 @@
+/* General Form Styling */
+.player-form-container {
+ max-width: 600px;
+ margin: 2rem auto;
+ padding: 20px;
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ background-color: #f9f9f9;
+}
+
+.player-form {
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+}
+
+.player-form h2 {
+ text-align: center;
+ color: #333;
+}
+
+/* Input Fields */
+.player-form label {
+ display: block;
+ font-size: 16px;
+ color: #555;
+ margin-bottom: 8px;
+}
+
+.player-form input {
+ width: 100%;
+ padding: 10px;
+ font-size: 14px;
+ border: 1px solid #ccc;
+ border-radius: 4px;
+ box-sizing: border-box;
+}
+
+.player-form input:focus {
+ outline: none;
+ border-color: #007bff;
+}
+
+/* Scoped Buttons */
+.player-form button {
+ padding: 10px 16px;
+ font-size: 16px;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+}
+
+.form-submit-button {
+ background-color: #007bff;
+ color: white;
+}
+
+.form-submit-button:hover {
+ background-color: #0056b3;
+}
+
+/* Center the "Show Players" button */
+.show-players-container {
+ text-align: center;
+ margin-top: 20px;
+ /* Space between the form and the button */
+}
+
+.show-players-button {
+ padding: 10px 16px;
+ font-size: 16px;
+ border: none;
+ border-radius: 4px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+ background-color: #6c757d;
+ color: white;
+}
+
+.show-players-button:hover {
+ background-color: #5a6268;
+}
+
+/* Messages */
+.success-message {
+ color: #28a745;
+ font-size: 14px;
+ margin-top: 10px;
+}
+
+.error-message {
+ color: #dc3545;
+ font-size: 14px;
+ margin-top: 10px;
+}
+
+/* Players List */
+.players-list {
+ margin-top: 20px;
+ border-top: 1px solid #ddd;
+ padding-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+ .player-form-container {
+  padding: 16px;
+ }
+
+ .player-form button {
+  width: 100%;
+  /* Make buttons full-width in mobile view */
+ }
+}
