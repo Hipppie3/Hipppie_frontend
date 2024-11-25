@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx';
 import Players from './pages/Players.jsx';
 import Teams from './pages/Teams.jsx';
 import PlayersForm from './forms/playerForm.jsx'
+import PlayersPage from './pages/PlayersPage.jsx'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/players' element={<Players />} />
         <Route path='/teams' element={<Teams />} />
         <Route path='/playersForm' element={<PlayersForm />} />
+        <Route path='/players/:id' element={<PlayersPage />} />
       </Routes>
     </div>
     </div>

@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import { navigateToPlayer } from '../utility/Navigation.jsx';
 import './Players.css';
 
 
@@ -9,6 +11,7 @@ const Players = () => {
   const [error, setError] = useState(null);
 
   const defaultPlayer = '/defaultPlayer.png';
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -40,8 +43,12 @@ const Players = () => {
   return (
     <div className='players-container'>
       {players.map(player => (
-        <div className='player-card' key={player.id}>
-          {!player.image ? <img src={defaultPlayer} alt='Default Player' className='player-image' /> : <img src={player.image} alt={`${player.firstName} ${player.lastName}`} className='player-image' />}
+        <div className='player-card' key={player.id} onClick={() => navigateToPlayer(navigate, player.id)} style={{cursor: 'pointer'}}>
+
+          {!player.image ? 
+          <img src={defaultPlayer} alt='Default Player' className='player-image' /> :
+          <img src={player.image} alt={`${player.firstName} ${player.lastName}`} className='player-image' />}
+
           <h2 className='player-name'>{`${player.firstName} ${player.lastName}`}</h2>
         </div>
       ))}
