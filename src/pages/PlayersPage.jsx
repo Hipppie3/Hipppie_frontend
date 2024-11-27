@@ -13,7 +13,7 @@ const PlayerPage = () => {
       try {
         const response = await axios.get(`/api/players/${id}`);
         setPlayer(response.data.player);
-        console.log(response)
+        console.log(response.data.player)
       } catch (error) {
         console.error("Error fetching player", error);
         setError("Failed to load player details.");
@@ -25,7 +25,6 @@ const PlayerPage = () => {
   }, [id]);
 
 
-
   if (loading) return <div>Loading player details...</div>;
   if (error) return <div>{error}</div>;
   if (!player) return <div>No player found</div>;
@@ -34,6 +33,7 @@ const PlayerPage = () => {
     <div>
       <h1>{`${player.firstName} ${player.lastName}`}</h1>
       <img src={player.image || '/defaultPlayer.png'} alt={player.firstName} />
+      <h2>Team: {player?.team?.name || "No Team"}</h2>
     </div>
   );
 };

@@ -48,8 +48,9 @@ const Players = () => {
           {!player.image ? 
           <img src={defaultPlayer} alt='Default Player' className='player-image' /> :
           <img src={player.image} alt={`${player.firstName} ${player.lastName}`} className='player-image' />}
-
+          {console.log(player)}
           <h2 className='player-name'>{`${player.firstName} ${player.lastName}`}</h2>
+          <h2>{player?.team?.name || "No Team"}</h2>
         </div>
       ))}
     </div>

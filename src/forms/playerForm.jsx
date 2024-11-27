@@ -25,7 +25,7 @@ function PlayerForm() {
       console.log('Player created:', response.data);
 
       // Set success message
-      setPlayerCreated(`Player "${formData.firstName} ${formData.lastName}" created successfully.`);
+      setPlayerCreated(`Player "${formData.firstName} ${formData.lastName}" created successfully`);
       setErrorMessage(''); // Clear any previous error messages
 
       // Clear form
