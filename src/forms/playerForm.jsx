@@ -16,6 +16,8 @@ function PlayerForm() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingPlayerId, setEditingPlayerId] = useState(null);
   const [teams, setTeams] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [error, setError] = useState(null);
 
@@ -24,6 +26,14 @@ function PlayerForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleTeamFilter = (e) => {
+    setSelectedTeam(e.target.value)
+  }
 
   const handleEdit = (player) => {
   if (editingPlayerId === player.id) {
@@ -53,7 +63,11 @@ function PlayerForm() {
           axios.get('/api/players'),
           axios.get('/api/teams')
         ]);
-        setPlayers(playersResponse.data.players);
+        const sortedPlayers = playersResponse.data.players.sort((a,b) => 
+        a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase())
+      );
+      
+        setPlayers(sortedPlayers);
         setTeams(teamsResponse.data.teams);
 
         console.log('Players:', playersResponse.data.players);
@@ -66,35 +80,49 @@ function PlayerForm() {
     fetchData();
   },[]);
 
-  const submitPlayer = async (e) => {
-    e.preventDefault();
-    try {
-      if (isEditing) {
-        const response = await axios.put(`/api/players/${editingPlayerId}`, formData)
-        const updatedPlayer = response.data.player
-        console.log('Player updated:', updatedPlayer);
-        setPlayers((prev) => 
-        prev.map((player) => 
-        player.id === editingPlayerId ? updatedPlayer : player)
+const submitPlayer = async (e) => {
+  e.preventDefault();
+
+  // Ensure `teamId` is null if not selected
+  const sanitizedFormData = {
+    ...formData,
+    teamId: formData.teamId || null, // Convert empty string to null
+  };
+
+  try {
+    if (isEditing) {
+      const response = await axios.put(`/api/players/${editingPlayerId}`, sanitizedFormData);
+      const updatedPlayer = response.data.player;
+
+      console.log('Player updated:', updatedPlayer);
+      setPlayers((prev) =>
+        prev.map((player) =>
+          player.id === editingPlayerId ? updatedPlayer : player
+        )
       );
-      setPlayerCreated(`Player " ${formData.firstName} ${formData.lastName} ${formData.teamId} updated successfully`)
-      } else 
-      {
-      const response = await axios.post('/api/players/createPlayer', formData);
+      setPlayerCreated(
+        `Player "${formData.firstName} ${formData.lastName}" updated successfully`
+      );
+    } else {
+      const response = await axios.post('/api/players/createPlayer', sanitizedFormData);
       console.log('Player created:', response.data);
       setPlayers((prev) => [...prev, response.data.player]);
-      setPlayerCreated(`Player "${formData.firstName} ${formData.lastName} ${formData.teamId} " created successfully`);
-      }
-      setFormData({ firstName: '', lastName: '', teamId: ''});
-      setEditingPlayerId(null);
-      setIsEditing(false);
-      setErrorMessage(''); 
-      setTimeout(() => setPlayerCreated(''), 3000);
-    } catch (error) {
-      console.error('Error creating player:', error.response?.data || error.message);
-      setErrorMessage('Failed to create player. Please try again.');
+      setPlayerCreated(
+        `Player "${formData.firstName} ${formData.lastName}" created successfully`
+      );
     }
-  };
+
+    setFormData({ firstName: '', lastName: '', teamId: '' });
+    setEditingPlayerId(null);
+    setIsEditing(false);
+    setErrorMessage('');
+    setTimeout(() => setPlayerCreated(''), 3000);
+  } catch (error) {
+    console.error('Error creating/updating player:', error.response?.data || error.message);
+    setErrorMessage('Failed to create/update player. Please try again.');
+  }
+};
+
 
 
   const handleDelete = async (playerId) => {
@@ -108,6 +136,14 @@ function PlayerForm() {
     }
   }
 
+  const filteredPlayers = players.filter((player) => {
+    const matchesSearch = `${player.firstName} ${player.lastName}`
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase());
+
+    const matchesTeam = selectedTeam ? player.teamId === parseInt(selectedTeam) : true;
+    return matchesSearch && matchesTeam;
+  });
 
 return (
   <div className="player-form-container">
@@ -129,7 +165,7 @@ return (
       <label>Team</label>
       <select
       name="teamId"
-      value={formData.teamId}
+      value={formData.teamId || ''}
       onChange={handleChange}
       >
       <option value="">Select a Team</option>
@@ -140,6 +176,7 @@ return (
       ))}
       </select>
       </div>
+      
       <button type="submit" className="form-submit-button">
         {isEditing ? 'UPDATE' : 'CREATE'}
       </button>
@@ -160,17 +197,72 @@ return (
     </div>
 
     {error && <p className="error-player-message">{error}</p>}
-    {showPlayers && (
-      <div className="players-list">
-        {players.map(player => (
-          <div key={player.id}>
-            <h2>{`${player.firstName} ${player.lastName}`}</h2>
-            <button onClick={() => handleEdit(player)}>{editingPlayerId === player.id ? 'Unedit' : 'Edit' }</button>
-            <button onClick={() => handleDelete(player.id)}>Delete</button>
-          </div>
-        ))}
-      </div>
-    )}
+{showPlayers && (
+
+  <div className="player-form-players-list">
+    <input 
+    type='text'
+    placeholder='Search by name...'
+    value={searchTerm}
+    onChange={handleSearch}
+    className='player-form-search'
+    />
+    <select
+    value={selectedTeam}
+    onChange={handleTeamFilter}
+    className='player-form-filter'
+    >
+    <option value=''>All Teams</option>
+    {teams.map((team)=> (
+      <option key={team.id} value={team.id}>
+        {team.name}
+      </option>
+    ))}
+    </select>
+    <button 
+    onClick={() => {
+      setSearchTerm('');
+      setSelectedTeam('');
+    }}
+    className='player-form-clear-bottom'
+    >Clear Filters</button>
+    <table className="player-form-table">
+      <thead>
+        <tr>
+          <th className="player-form-header">First Name</th>
+          <th className="player-form-header">Last Name</th>
+          <th className="player-form-header">Team</th>
+          <th className="player-form-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+{filteredPlayers.map((player) => (
+  <tr key={player.id} className="player-form-row">
+    <td className="player-form-cell">{player.firstName}</td>
+    <td className="player-form-cell">{player.lastName}</td>
+    <td className="player-form-cell">{player?.team?.name || ''}</td>
+    <td className="player-form-cell">
+      <button
+        className="player-form-edit-button"
+        onClick={() => handleEdit(player)}
+      >
+        {editingPlayerId === player.id ? 'Unedit' : 'Edit'}
+      </button>
+      <button
+        className="player-form-delete-button"
+        onClick={() => handleDelete(player.id)}
+      >
+        Delete
+      </button>
+    </td>
+  </tr>
+))}
+
+      </tbody>
+    </table>
+  </div>
+)}
+
   </div>
 );
 

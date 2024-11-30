@@ -46,12 +46,12 @@ const Players = () => {
       {players.map(player => (
         <div className='players-card' key={player.id} onClick={() => navigateToPlayer(navigate, player.id)} style={{cursor: 'pointer'}}>
 
-          {!player.image ? 
+          {/* {!player.image ? 
           <img src={defaultPlayer} alt='Default Player' className='player-image' /> :
           <img src={player.image} alt={`${player.firstName} ${player.lastName}`} className='players-image' />}
-          {console.log(player)}
+          {console.log(player)} */}
           <h2 className='players-name'>{`${player.firstName} ${player.lastName}`}</h2>
-          <h2>{player?.team?.name || "No Team"}</h2>
+          <h2>{player?.team?.name || ""}</h2>
         </div>
       ))}
     </div>
