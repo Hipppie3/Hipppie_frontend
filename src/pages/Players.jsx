@@ -20,7 +20,7 @@ const Players = () => {
         setPlayers(response.data.players);
       } catch(error) {
         console.error("Error fetching players", error);
-        setError("failed to load players. Please try again later.")
+        setError("Failed to load players. Please try again later.")
       } finally {
         setLoading(false);
       }
@@ -42,14 +42,15 @@ const Players = () => {
 
   return (
     <div className='players-container'>
+      <h2>PLAYERS</h2>
       {players.map(player => (
-        <div className='player-card' key={player.id} onClick={() => navigateToPlayer(navigate, player.id)} style={{cursor: 'pointer'}}>
+        <div className='players-card' key={player.id} onClick={() => navigateToPlayer(navigate, player.id)} style={{cursor: 'pointer'}}>
 
           {!player.image ? 
           <img src={defaultPlayer} alt='Default Player' className='player-image' /> :
-          <img src={player.image} alt={`${player.firstName} ${player.lastName}`} className='player-image' />}
+          <img src={player.image} alt={`${player.firstName} ${player.lastName}`} className='players-image' />}
           {console.log(player)}
-          <h2 className='player-name'>{`${player.firstName} ${player.lastName}`}</h2>
+          <h2 className='players-name'>{`${player.firstName} ${player.lastName}`}</h2>
           <h2>{player?.team?.name || "No Team"}</h2>
         </div>
       ))}

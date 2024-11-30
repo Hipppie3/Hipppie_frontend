@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import { navigateToTeam } from '../utility/Navigation.jsx';
 import './Teams.css'; 
 
 function Teams() {
@@ -7,12 +9,14 @@ function Teams() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchTeam = async () => {
       try {
         const response = await axios.get('/api/teams');
-        console.log(response.data.team);
-        setTeams(response.data.team);
+        console.log(response.data.teams);
+        setTeams(response.data.teams);
       } catch (error) {
         console.log('Error fetching teams', error.message);
         setError('Failed to load teams');
@@ -37,7 +41,7 @@ function Teams() {
     <div className="teams-container">
       <h2 className="teams-title">Teams</h2>
       {teams.map((team) => (
-        <div className="team-item" key={team.id}>
+        <div className="team-item" key={team.id} onClick={() => navigateToTeam(navigate, team.id)} style={{cursor: 'pointer'}}>
           <h3>{team.name}</h3>
         </div>
       ))}

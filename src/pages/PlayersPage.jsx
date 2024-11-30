@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {navigateToTeam} from '../utility/Navigation.jsx';
+import './PlayersPage.css'
 
 const PlayerPage = () => {
   const { id } = useParams();
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPlayer = async () => {
@@ -16,7 +19,7 @@ const PlayerPage = () => {
         console.log(response.data.player)
       } catch (error) {
         console.error("Error fetching player", error);
-        setError("Failed to load player details.");
+        setError("Failed to load player details");
       } finally {
         setLoading(false);
       }
@@ -24,18 +27,21 @@ const PlayerPage = () => {
     fetchPlayer();
   }, [id]);
 
-
+  if (!player) return <div>No player found</div>;
   if (loading) return <div>Loading player details...</div>;
   if (error) return <div>{error}</div>;
-  if (!player) return <div>No player found</div>;
 
-  return (
-    <div>
-      <h1>{`${player.firstName} ${player.lastName}`}</h1>
-      <img src={player.image || '/defaultPlayer.png'} alt={player.firstName} />
-      <h2>Team: {player?.team?.name || "No Team"}</h2>
-    </div>
-  );
+
+return (
+  <div className="players-page-card">
+    <img src={player.image || '/defaultPlayer.png'} alt={player.firstName} />
+    <h1>{`${player.firstName} ${player.lastName}`}</h1>
+    <h2 onClick={() => navigateToTeam(navigate, player?.team?.id)}>
+      Team: {player?.team?.name || "No Team"}
+    </h2>
+  </div>
+);
+
 };
 
 export default PlayerPage;
