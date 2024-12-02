@@ -11,7 +11,7 @@ function TeamForm() {
   const [teamCreated, setTeamCreated] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editingTeamId, setEditingTeamId] = useState(null);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState([]);
   const [showTeams, setShowTeams] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -32,36 +32,52 @@ function TeamForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const submitTeam = async (e) => {
-    e.preventDefault();
-    try {
-      if (isEditing) {
-        const response = await axios.put(
-          `/api/teams/${editingTeamId}`,
-          formData
-        );
-        const updatedTeam = response.data.team;
-        setTeams((prev) =>
-          prev.map((team) =>
-            team.id === editingTeamId ? updatedTeam : team
-          )
-        );
-        setTeamCreated(`Team "${formData.name}" updated successfully`);
-      } else {
-        const response = await axios.post('/api/teams/createTeam', formData);
-        setTeams((prev) => [...prev, response.data.team]);
-        setTeamCreated(`Team "${formData.name}" created successfully`);
-      }
-      setFormData({ name: '' });
-      setEditingTeamId(null);
-      setIsEditing(false);
-      setErrorMessage('');
-      setTimeout(() => setTeamCreated(''), 3000);
-    } catch (error) {
-      console.error('Error creating/updating team:', error);
-      setErrorMessage('Failed to create/update team. Please try again.');
+const submitTeam = async (e) => {
+  e.preventDefault();
+
+  if (!formData.name.trim()) {
+    setErrorMessage((prev) => [...prev, 'Team name cannot be empty.']);
+    setTimeout(() => {
+      setErrorMessage((prev) => prev.filter((msg) => msg !== 'Team name cannot be empty.'));
+    }, 3000);
+    return;
+  }
+
+  try {
+    if (isEditing) {
+      const response = await axios.put(
+        `/api/teams/${editingTeamId}`,
+        formData
+      );
+      const updatedTeam = response.data.team;
+      setTeams((prev) =>
+        prev.map((team) =>
+          team.id === editingTeamId ? updatedTeam : team
+        )
+      );
+      setTeamCreated(`Team "${formData.name}" updated successfully`);
+    } else {
+      const response = await axios.post('/api/teams/createTeam', formData);
+      setTeams((prev) => [...prev, response.data.team]);
+      setTeamCreated(`Team "${formData.name}" created successfully`);
     }
-  };
+
+    // Reset form after success
+    setFormData({ name: '' });
+    setEditingTeamId(null);
+    setIsEditing(false);
+  } catch (error) {
+    console.error('Error creating/updating team:', error);
+    setErrorMessage((prev) => [...prev, 'Failed to create/update team. Please try again.']);
+  }
+
+  // Unified timeout to clear both messages
+  setTimeout(() => {
+    setTeamCreated('');
+    setErrorMessage([]);
+  }, 3000);
+};
+
 
   const handleEdit = (team) => {
     if (editingTeamId === team.id) {

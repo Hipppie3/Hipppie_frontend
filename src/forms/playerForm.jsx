@@ -8,7 +8,7 @@ import './playerForm/PlayerForm.css';
 function PlayerForm() {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', teamId: '', sportId: '' });
   const [playerCreated, setPlayerCreated] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState([]);
   const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [sports, setSports] = useState([]);
@@ -57,6 +57,14 @@ const submitPlayer = async (e) => {
     teamId: formData.teamId || null,
     sportId: formData.sportId || null,
   };
+
+      if (!formData.firstName.trim()) {
+    setErrorMessage((prev) => [...prev, 'Player first name cannot be empty.']);
+    setTimeout(() => {
+      setErrorMessage((prev) => prev.filter((msg) => msg !== 'Player first name cannot be empty.'));
+    }, 3000);
+      return;
+    }
   try {
     if (isEditing) {
       const response = await axios.put(`/api/players/${editingPlayerId}`, sanitizedFormData);
@@ -81,12 +89,15 @@ const submitPlayer = async (e) => {
     setFormData({ firstName: '', lastName: '', teamId: '', sportId: '' });
     setEditingPlayerId(null);
     setIsEditing(false);
-    setErrorMessage('');
-    setTimeout(() => setPlayerCreated(''), 3000);
   } catch (error) {
     console.error('Error creating/updating player:', error.response?.data || error.message);
     setErrorMessage('Failed to create/update player. Please try again.');
   }
+
+  setTimeout(() => {
+    setPlayerCreated('');
+    setErrorMessage([])
+  }, 3000);
 };
 
   const handleEdit = (player) => {
